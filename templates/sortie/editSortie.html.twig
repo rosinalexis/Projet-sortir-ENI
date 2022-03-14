@@ -1,0 +1,170 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	<div class="h1">
+		Modifier une sortie
+	</div>
+	<hr>
+	{{form_start(form)}}
+	<div style="display:inline-block">
+		<table>
+			<tbody>
+				<tr>
+					<td>Nom de la sortie : </td>
+					<td>{{form_widget(form.nom)}}</td>
+				</tr>
+				<tr>
+					<td>Date et heure de la sortie : </td>
+					<td><input type="datetime-local" name="date_debut" id="date_debut"  value="{{sortie.getDateDebut()|date('Y-m-d\\TH:i:s')}}"></td>
+				</tr>
+				<tr>
+					<td>Date limite d'inscription : </td>
+					<td><input type="datetime-local" name="date_cloture" id="date_cloture" value="{{sortie.getDateCloture()|date('Y-m-d\\TH:i:s')}}"></td>
+				</tr>
+				<tr>
+					<td>Nombre de places : </td>
+					<td><input type="number" min="0" name="nbInscriptionsMax" id="nbInscriptionsMax" value="{{sortie.getNbInscriptionsMax}}"></td>
+				</tr>
+				<tr>
+					<td>Durée : </td>
+					<td><input type="number" min="0" name="duree" id="duree" value="{{sortie.getDuree}}"></td>
+				</tr>
+				<tr>
+					<td>Description et infos : </td>
+					<td>{{form_widget(form.description)}}</td>
+				</tr>
+				<tr>
+					<td>Ville : </td>
+					<td>
+						<select name="ville" id="ville" style="width:60%" required>
+							{% for ville in villes %}
+								<option value="ville{{ville.getId()}}" id="ville{{ville.getId()}}" data-ville="{{ville.getCodePostal()}}" {% if sortie.lieux.villes.getId() == ville.getId() %}{{"selected"}}{% endif %}>{{ville.getNomVille()}}</option>
+							{% endfor %}
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Lieu : </td>
+					<td>
+						<input type="text" id="id_lieu" value="{{sortie.lieux.getId()}}" hidden>
+						<input type="text" id="rue_load" value="{{sortie.lieux.getRue()}}" hidden>
+						<select name="lieu" id="lieu" style="width:60%" required></select>
+					</td>
+
+					<script type="text/javascript">
+						let selectLieu = document.getElementById("lieu");
+						let id = document.getElementById(document.getElementById("ville").value).getAttribute("id").replace("ville","");
+
+						axios.get("http://localhost/projetSymfony/public/lieux_ville/"+id).then((response) => {
+							let cp = document.getElementById(document.getElementById("ville").value).getAttribute("data-ville");
+							document.getElementById('cp').value = cp;
+							document.getElementById('rue').value = document.getElementById("rue_load").value;
+
+								response.data.forEach(elt => {
+									let newOption = new Option(elt.nom_lieu, "lieu"+elt.id);
+									newOption.setAttribute("id","lieu"+elt.id);
+									newOption.setAttribute("data-lieu",elt.rue);
+
+									if (elt.id == document.getElementById("id_lieu").value) newOption.setAttribute("selected","");
+
+									selectLieu.options.add(newOption);
+								});
+						});
+
+						document.getElementById('ville').addEventListener('change', e =>{
+							let cp = document.getElementById(document.getElementById("ville").value).getAttribute("data-ville");
+							document.getElementById('cp').value = cp;
+							
+							id = document.getElementById(document.getElementById("ville").value).getAttribute("id").replace("ville","");
+							$('#lieu').find('option').remove();
+
+							let opt = new Option();
+							opt.setAttribute("selected","");
+							selectLieu.options.add(opt);
+
+							axios.get("http://localhost/Projet-Symfony/public/lieux_ville/"+id).then((response) => {
+								response.data.forEach(elt => {
+									console.log()
+									let newOption = new Option(elt.nom_lieu, "lieu"+elt.id);
+									newOption.setAttribute("id","lieu"+elt.id);
+									newOption.setAttribute("data-lieu",elt.rue);
+									selectLieu.options.add(newOption);
+								});
+							});
+						})
+
+						document.getElementById('lieu').addEventListener('change', e =>{
+							let rue = document.getElementById(document.getElementById("lieu").value).getAttribute("data-lieu");
+							document.getElementById('rue').value = rue;
+						})
+					</script>
+				</tr>
+				<tr>
+					<td>Rue : </td>
+					<td><input type="text" id="rue" name="rue" disabled></td>
+				</tr>
+				<tr>
+					<td>Code postal : </td>
+					<td><input type="text" id="cp" name="cp" disabled></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div>
+		<input type="text" name="etat_initial" value="{{sortie.etats.libelle}}" hidden>
+		<button type="submit" name="etat" value="enregistrer" class="btn btn-primary">Enregistrer</button>
+		<button type="submit" name="etat" value="publier" class="btn btn-primary">Publier</button>
+		<a href="{{path('delSortie',{'id':sortie.id})}}" class="btn btn-danger" style="margin-right:4px">Supprimer</button>
+		<a href="{{path('addSortie')}}" class="btn btn-warning">Annuler</a>
+	</div>
+{{form_end(form)}}
+<hr>
+	<!-- bouton modal -->
+	<div>
+		<button type="button" class="btn btn-success btn-group btn-group-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+			<i class="fas fa-plus">&nbsp;Ajouter un lieu</i>
+		</button>
+	</div>
+	<!-- modal -->
+	<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="staticBackdropLabel">Ajouter un lieu</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form action="{{path('quickAddLieu')}}" method="post">
+					<div class="modal-body">
+						<table>
+							<tbody>
+								<tr>
+									<td>Site organisateur :&nbsp;</td>
+									<td>
+										<select name="ville" id="ville" style="width:60%">
+											<option selected></option>
+											{% for ville in villes %}
+												<option value="{{ville.getId()}}">{{ville.getNomVille()}}</option>
+											{% endfor %}
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>Nom* :&nbsp;</td>
+									<td><input type="text" name="nom_lieu" id="nom_lieu" required></td>
+								</tr>
+								<tr>
+									<td>Rue* :&nbsp;</td>
+									<td><input type="text" name="rue" id="rue" required></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+						<input type="submit" class="btn btn-dark" value="Enregistrer">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}

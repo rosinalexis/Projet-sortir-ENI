@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+		<link rel="stylesheet" href="{{asset('css/app.css')}}">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.22.0/axios.min.js" integrity="sha512-m2ssMAtdCEYGWXQ8hXVG4Q39uKYtbfaJL5QMTbhl2kc6vYyubrKHhr6aLLXW4ITeXSywQLn1AhsAaqrJl8Acfg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://code.jquery.com/jquery-3.6.0.slim.js" integrity="sha256-HwWONEZrpuoh951cQD1ov2HUK5zA5DwJ1DNUXaM6FsY=" crossorigin="anonymous"></script>
+		<title>Sortie</title>
+	</head>
+
+	<body>
+		<script type="text/javascript">
+			let etat = getCookie("dark_theme");
+
+if (etat != "") {
+let head = document.getElementsByTagName('head')[0];
+let link = document.createElement('link');
+link.rel = 'stylesheet';
+link.type = 'text/css';
+
+if (etat == "on") {
+link.href = 'http://localhost:8000/css/dark.css';
+} else {
+link.href = 'http://localhost:8000/css/app.css';
+} link.media = 'all';
+head.appendChild(link);
+
+}
+
+// récupérer un cookie
+function getCookie(name) {
+let cookieArr = document.cookie.split(";");
+
+for (let i = 0; i < cookieArr.length; i++) {
+let cookiePair = cookieArr[i].split("=");
+if (name == cookiePair[0].trim()) 
+return decodeURIComponent(cookiePair[1]);
+
+
+
+}
+
+return null;
+}
+		</script>
+		{% include 'layouts/navigations/_header.html.twig' %}
+
+		<div class="container"> {% block body %}{% endblock %}
+			</div>
+
+			<!-- Modal -->
+			<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabelTrans">Modal title</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+							<a id="exampleBtnTrans" class="btn btn-danger" href="aaaa">
+								<i class="fas fa-trash"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- end Modal -->
+
+			<script>
+				function deleteElement(el) {
+let elementId = el.dataset.elementid;
+
+// récupération du nom et de l'id
+titleElement = document.getElementById('exampleModalLabelTrans');
+aElement = document.getElementById('exampleBtnTrans');
+titleElement.innerText = 'Voulez-vous supprimer "' + el.dataset.elementnom + '" ? ';
+
+currentPath = location.href;
+
+if (currentPath.includes("showLieux")) {
+p = window.location.origin + "/admin/delLieu/" + elementId;
+
+} else if (currentPath.includes("sites")) {
+
+p = location.href + "/del/" + elementId
+
+} else if (currentPath.includes("participant/profil")) {
+
+p = location.href + "/" + elementId + "/delete";
+
+} else if (currentPath.includes("ville")) {
+
+p = window.location.origin + "/admin/ville/" + elementId + "/delete"
+
+} else {
+p = location.href + "delSortie/" + elementId;
+}
+
+aElement.href = p;
+
+}
+			</script>
+		</body>
+	</html>
+</script>
+
+{% include 'layouts/navigations/_footer.html.twig' %}
+<script src="{{asset('js/app.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script></body></html>

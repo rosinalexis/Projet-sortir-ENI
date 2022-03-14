@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un participant!
+{% endblock %}
+
+{% block body %}
+
+
+	<h2 class="my-5 text-uppercase text-center">Ajout un participant</h2>
+	<div class="row container ">
+		<div class="col-lg-6 mx-auto">
+
+			{{ form_start(formParticipant) }}
+			{{ form_widget(formParticipant) }}
+
+			<div class="my-5 d-grid gap-2 col-6 mx-auto">
+				<button class="py-3 btn btn-primary fw-bolder" type="submit">Ajouter</button>
+				<a class="py-3 btn btn-danger fw-bolder" href="{{ path('app_profile') }}">Retour</a>
+			</div>
+			{{ form_end(formParticipant) }}
+		</div>
+	</div>
+
+{% endblock %}

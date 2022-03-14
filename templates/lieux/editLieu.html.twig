@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="h" id="gestion-sites">
+		<h1 class="title-page">Modification du lieu {{lieu.getNomLieu()}}</h1>
+        {{form_start(form)}}
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Nom</td>
+                        <td></td>
+                        <td><input type="text" name="nom_lieu" value="{{lieu.getNomLieu()}}"></td>
+                    </tr>
+                    <tr>
+                        <td>Rue</td>
+                        <td></td>
+                        <td><input type="text" name="rue" value="{{lieu.getRue()}}"></td>
+                    </tr>
+                    <tr>
+                        <td>Latitude</td>
+                        <td></td>
+                        <td><input type="number" step=".00001" name="latitude" value="{{lieu.getLatitude()}}"></td>
+                    </tr>
+                    <tr>
+                        <td>Longitude</td>
+                        <td></td>
+                        <td><input type="number" step=".00001" name="longitude" value="{{lieu.getLongitude()}}"></td>
+                    </tr>
+                    <tr>
+                        <td>Ville</td>
+                        <td></td>
+                        <td>
+                            <select id="ville">
+                                {% for ville in villes %}
+                                    <option value="{{ville.getId()}}" {% if (ville.getId() == lieu.getVilles().getId()) %}{{"selected"}}{% endif %}>{{ville.getNomVille()}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><button type="submit" class="btn btn-success">Enregistrer</button><a href="{{path('showLieux')}}" class="btn btn-warning">Annuler</a></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        {{form_end(form)}}
+    </div>
+{% endblock %}

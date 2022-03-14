@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil de
+	{{ participant.nom}}!
+{% endblock %}
+
+{% block body %}
+
+	{%  for type , messages  in app.flashes(['success','error','info']) %}
+		{% for message in messages %}
+			<div class="alert alert-{{ (type =='error') ? 'danger' : type }} text-center" role="alert">
+				{{ message }}
+			</div>
+		{% endfor %}
+	{% endfor %}
+
+	<h1 class="my-5 text-uppercase text-center">Ajouter des utilisateurs via un ficher
+	</h1>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6">
+				<form action="{{ path('app_profile_add_json') }}" enctype="multipart/form-data" method="post">
+					Fichier .json ou .csv à télécharger :
+
+					<input type="file" name="Fichier à télécharger" id="fileToUpload" class="form-control">
+
+					<button class="btn btn-primary my-5" type="submit" name="submit">Télécharger le fichier</button>
+					<a class="btn btn-danger" href="{{ path('home') }}">
+						Retour à la page d'accueil</a>
+				</form>
+			</div>
+		</div>
+
+	</div>
+
+
+{% endblock %}

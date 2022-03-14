@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div id="register">
+        <h1 class="mb-3 mt-3">Création d'un participant</h1>
+
+        <div class="col-5">
+            {{ form_start(registrationForm) }}
+               
+                 {{ form_row(registrationForm.email) }}
+                 {{ form_row(registrationForm.plainPassword) }}
+                 {{ form_row(registrationForm.nom) }}
+                 {{ form_row(registrationForm.prenom) }}
+                 {{ form_row(registrationForm.telephone) }}
+                 {{ form_row(registrationForm.sites) }}
+                 {{ form_row(registrationForm.roles) }}
+
+                <div class="centerer">
+                    <button type="submit" class="btn btn-primary mt-2 mb-3">Enregistrer</button>
+                </div>
+            {{ form_end(registrationForm) }}
+        </div>
+
+    </div>
+
+{% endblock %}

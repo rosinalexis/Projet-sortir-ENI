@@ -1,0 +1,36 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	<div class="h1">
+		Annuler une sortie
+	</div>
+	<table>
+		<tbody>
+			<tr>
+				<td>Nom de la sortie :
+				</td>
+				<td>{{sortie.nom}}</td>
+			</tr>
+			<tr>
+				<td>Date de la sortie :
+				</td>
+				<td>{{sortie.getDateDebut()|date("d/m/y")}}</td>
+			</tr>
+			<tr>
+				<td>Ville organisatrice :</td>
+				<td>{{sortie.organisateur.sites}}</td>
+			</tr>
+			<tr>
+				<td>Lieu :
+				</td>
+				<td>{{sortie.lieux}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<form action="{{path('annuleSortie',{"id":sortie.id})}}" method="post">
+		<div>Motif : <textarea name="motif" id="motif" cols="30" rows="2"></textarea></div>
+		<div><button type="submit" class="btn btn-primary">Enregistrer</button>
+        <!-- TODO rediriger vers accueil quand elle sera créée -->
+        <a class="btn btn-warning" href="{{path('addSortie')}}" style="margin-left:2%">Annuler</a></div>
+	</form>
+{% endblock %}

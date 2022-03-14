@@ -1,0 +1,144 @@
+*::selection{
+  color: pink;
+}
+
+
+body, td, .modal-content, th, option, a, select, input[type=date], input[type=datetime-local], input[type=text], input[type=text]:disabled, input[type=number], textarea, .nav-link, .form-control, .form-control:disabled, .form-select{
+    background-color: #323232;
+    color: white;
+}
+
+input[type=checkbox] {
+    background-color: #323232;
+    color: white;
+    border-color: white;
+}
+
+input[type=text]:focus, input[type=date]:focus, input[type=datetime-local]:focus, input[type=number]:focus, textarea:focus, .form-control:focus, .form-select:focus {
+    background-color: #323232;
+    color: #69D0EF;
+    border-radius: 25px;
+}
+
+a:hover, .nav-link:hover {
+    color: red;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 20px;
+}
+  
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+}
+  
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: white;
+    border-radius: 10px;
+}
+
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+
+html {
+    height: 100vh;
+  }
+  
+  .h{
+      height: 80vh;
+  }
+  
+  .title-page {
+    text-align: center;
+  }
+  
+  .my-custom-scrollbar {
+    position: relative;
+    height: 400px;
+    overflow: auto;
+  }
+  .table-wrapper-scroll-y {
+    display: block;
+  }
+  
+  #login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  #login #login-form {
+    text-align: center;
+  }
+  
+  #login .switch-remember {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  #gestion-sites {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  #gestion-sites .filter {
+    width: 100%;
+    float: left;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+  
+  #gestion-sites .table-sites {
+    height: 60%;
+    width: 100%;
+    overflow-y: auto;
+  }
+  
+  #home #home-form{
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-direction: row;
+      margin-bottom: 2%;
+  }
+  
+  #home #home-form .filter-p1{
+      width: 60%;
+  }
+  
+  #home #home-form .filter-p1 .home-filer-date{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+  
+  #home .home-info{
+      text-align: right;
+  }
+  
+  #home .alert{
+    text-align: center;
+  }
+  
+  #register{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  #register .centerer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }

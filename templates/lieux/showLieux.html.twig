@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="h" id="gestion-sites">
+		<h1 class="title-page">Gérer les lieux</h1>
+
+		<div class="filter">
+			<h2 class="mb-3">Filter les lieux</h2>
+
+			<form class="row g-3" action="{{path('lieux_search')}}" method="POST">
+				<div class="col-12 col-lg-auto">
+					<label for="input-search-lieux">Le nom contient</label>
+				</div>
+				<div class="col-6 col-lg-auto">
+					<input type="text" class="form-control" id="input-search-lieux" name="filter_lieux">
+				</div>
+				<div class="col-6 col-lg-auto">
+					<button type="submit" class="btn btn-primary mb-3">Rechercher</button>
+				</div>
+			</form>
+		</div>
+
+		<div class="table-sites">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Nom</th>
+						<th>Rue</th>
+						{% if is_granted("ROLE_ADMIN") %}
+							<th>Actions</th>
+						{% endif %}
+					</tr>
+				</thead>
+				<tbody>
+					{% for lieu in lieux %}
+						<tr>
+							<td>
+								<a href="{{path('showLieu',{l:lieu.id})}}">{{lieu.getNomLieu()}}</a>
+							</td>
+							<td>{{lieu.getRue()}}</td>
+							{% if is_granted("ROLE_ADMIN") %}
+								<td>
+									<a href="{{path('editLieu',{l:lieu.getId()})}}" class="my-2 my-lg-0 btn btn-warning btn-border-radius">
+										<i class="fas fa-edit"></i>
+									</a>
+
+									<button type="button" class="mt-2 mt-lg-0 btn btn-danger btn-border-radius" data-elementid="{{lieu.id}}" data-elementnom="{{lieu.nomLieu}}" onclick="deleteElement(this)" data-bs-toggle="modal" data-bs-target="#exampleModal">
+										<i class="fas fa-trash"></i>
+									</button>
+
+								</td>
+							{% endif %}
+						</tr>
+					{% endfor %}
+				</tbody>
+			</tbody>
+		</table>
+	</div>
+	{% if is_granted("ROLE_ADMIN") %}
+		<a href="{{'addLieu'}}" class="my-2 btn btn-success">Ajouter un lieu</a>
+	{% endif %}
+</div>{% endblock %}

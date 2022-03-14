@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<div class="h" id="gestion-sites">
+		<h1 class="title-page">Gérer les sites</h1>
+
+		<div class="filter">
+			<h2 class="mb-3">Filter les sites</h2>
+
+			<form class="row g-3" action="{{path('sites_search')}}" method="POST">
+				<div class="col-12 col-lg-auto">
+					<label for="input-search-sites">Le nom contient :</label>
+				</div>
+				<div class="col-6 col-lg-auto">
+					<input type="text" class="form-control" id="input-search-sites" name="filter_sites">
+				</div>
+				<div class="col-6 col-lg-auto">
+					<button type="submit" class="btn btn-primary mb-3">Rechercher</button>
+				</div>
+			</form>
+		</div>
+
+		<div class="table-sites">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Ville</th>
+						{% if is_granted("ROLE_ADMIN") %}
+							<th>Actions</th>
+						{% endif %}
+					</tr>
+				</thead>
+				<tbody>
+					{% for site in lstSites %}
+						<tr>
+							<td>
+								<a href="{{path('sorties_site',{id:site.id})}}">{{site.getNomSite}}</a>
+							</td>
+							{% if is_granted("ROLE_ADMIN") %}
+								<td>
+									<a href="{{path('site_update',{id:site.id})}}" class="btn btn-warning btn-border-radius">
+										<i class="fas fa-edit"></i>
+									</a>
+
+									<button type="button" class="mt-2 mt-lg-0 btn btn-danger btn-border-radius" data-elementid="{{site.id}}" data-elementnom="{{site.nomSite}}" onclick="deleteElement(this)" data-bs-toggle="modal" data-bs-target="#exampleModal">
+										<i class="fas fa-trash"></i>
+									</button>
+								</td>
+							{% endif %}
+						</tr>
+					{% endfor %}
+					{% if is_granted("ROLE_ADMIN") %}
+						<tr>
+							<form action="{{path('site_add')}}" method="post">
+								<td><input type="text" class="form-control" name="search_sites" placeholder="Nom du site" required></td>
+								<td>
+									<button class="mt-3 mt-lg-0 btn btn-success" type="submit">Ajouter</button>
+								</td>
+							</form>
+						</tr>
+					{% endif %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+{% endblock %}

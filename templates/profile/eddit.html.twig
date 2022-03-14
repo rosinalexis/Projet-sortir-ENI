@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un participant!
+{% endblock %}
+
+{% block body %}
+
+	<h2 class="my-5 text-uppercase text-center">
+
+		{% if participant.id  == app.user.id %}
+			Modifier mon profil ({{participant.nom}})
+
+		{% else %}
+			Modifier profil	participant
+		{% endif %}
+	</h2>
+	<div class="row container ">
+		<div class="col-lg-6 mx-auto">
+
+			{% if app.user.id == participant.id and is_granted("ROLE_USER")  %}
+				{{ form_start(formParticipant) }}
+				{{ form_row(formParticipant.email, {'attr':{'ReadOnly':'true'} }) }}
+				{{ form_row(formParticipant.nom, {'attr':{'ReadOnly':'true'} }) }}
+				{{ form_row(formParticipant.prenom, {'attr':{'ReadOnly':'true'} }) }}
+				{{ form_row(formParticipant.telephone) }}
+				{{ form_row(formParticipant.actif, { 'label':false, 'attr':{'hidden':'hidden'} })}}
+
+				<div class="form-group">
+					<label for="faker_participant_sites">Sites*:</label>
+					<input type="text" value="{{participant.sites.nomSite}}" class="form-control" readonly="true" id="faker_participant_sites">
+				</div>
+
+				{{ form_row(formParticipant.sites, { 'label':false, 'attr':{'hidden':'hidden'} }) }}
+				{{ form_row(formParticipant.imageFile) }}
+
+				<div class="my-5 d-grid gap-2 col-6 mx-auto">
+					<button class="py-3 btn btn-primary fw-bolder" type="submit">Validation</button>
+					<a class="py-3 btn btn-danger fw-bolder" href="{{ path('home') }}">Retour</a>
+				</div>
+
+				{{ form_end(formParticipant) }}
+
+			{% elseif is_granted("ROLE_ADMIN") %}
+
+				{{ form_start(formParticipant) }}
+				{{form_widget(formParticipant)}}
+
+				<div class="my-5 d-grid gap-2 col-6 mx-auto">
+					<button class="py-3 btn btn-primary fw-bolder" type="submit">Validation</button>
+					<a class="py-3 btn btn-danger fw-bolder" href="{{ path('home') }}">Retour</a>
+				</div>
+				{{ form_end(formParticipant) }}
+			{% endif %}
+		</div>
+	</div>
+
+{% endblock %}

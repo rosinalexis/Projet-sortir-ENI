@@ -1,0 +1,95 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	<div class="h1">
+		Afficher une sortie
+	</div>
+	<div style="display:inline-block">
+		<table>
+			<tbody>
+				<tr>
+					<td>Nom de la sortie :
+					</td>
+					<td>{{sortie.nom}}</td>
+				</tr>
+				<tr>
+					<td>Organisateur :</td>
+					<td>{{sortie.organisateur.nom|upper}} {{sortie.organisateur.prenom|capitalize}}</td>
+				</tr>
+				<tr>
+					<td>Date et heure de la sortie :
+					</td>
+					<td>{{sortie.getDateDebut()|date("d/m/y H:i:s")}}</td>
+				</tr>
+				<tr>
+					<td>Date limite d'inscription :
+					</td>
+					<td>{{sortie.getDateCloture()|date("d/m/y H:i:s")}}</td>
+				</tr>
+				<tr>
+					<td>Nombre de places :
+					</td>
+					<td>{{sortie.nbInscriptionsMax}}</td>
+				</tr>
+				<tr>
+					<td>Durée :
+					</td>
+					<td>{{sortie.duree}}
+						minutes</td>
+				</tr>
+				<tr>
+					<td>Description et infos :
+					</td>
+					<td>{{sortie.description}}</td>
+				</tr>
+				<tr>
+					<td>Ville organisatrice :</td>
+					<td>{{sortie.organisateur.sites}}</td>
+				</tr>
+				<tr>
+					<td>Lieu :
+					</td>
+					<td>{{sortie.lieux}}</td>
+				</tr>
+				<tr>
+					<td>Rue :
+					</td>
+					<td>{{sortie.lieux.rue}}</td>
+				</tr>
+				<tr>
+					<td>Code postal :
+					</td>
+					<td>{{sortie.lieux.villes.getCodePostal()}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	{% if sortie.lieux.longitude is not null and sortie.lieux.latitude is not null %}
+		<iframe width="400" height="300" style="border:0;margin-left:3%;border-radius:20px" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=fr&amp;q={{sortie.lieux.latitude}},{{sortie.lieux.longitude}}&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+	{% endif %}
+	<hr>
+	<div class="h4">
+		Liste des participants inscrits
+	</div>
+	<div>
+		<table>
+			<thead>
+				<tr>
+					<th>Nom</th>
+					<th>Prénom</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for inscrit in participants %}
+					<tr>
+						<td>{{inscrit.getParticipants().nom}}</td>
+						<td>{{inscrit.getParticipants().prenom}}</td>
+						<td><a class="btn btn-primary" href="{{path('app_profile_show',{id:inscrit.getParticipants().getId()})}}">Voir</a></td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}

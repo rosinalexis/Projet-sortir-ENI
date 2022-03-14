@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="h" id="gestion-sites">
+		<h1 class="title-page">Sorties archivées</h1>
+        <table class="table">
+            <thead class="sticky-top">
+                <tr>
+                    <th>Organisateur</th>
+                    <th>Email</th>
+                    <th>Lieu</th>
+                    <th>Etat</th>
+                    <th>Site</th>
+                    <th>Date clôture</th>
+                    <th>Inscriptions max</th>
+                    <th>Date début</th>
+                    <th>Durée</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for archive in archives %}
+                    <tr>
+                        <td>{{archive.getNomOrganisateur()}}</td>
+                        <td>{{archive.getEmailOrganisateur()}}</td>
+                        <td>{{archive.getNomLieu()}}</td>
+                        <td>{{archive.getEtatSortie()}}</td>
+                        <td>{{archive.getNomSite()}}</td>
+                        <td>{{archive.getDateClotureInscription()|date('d/m/Y H:i')}}</td>
+                        <td>{{archive.getNnInscriptionMaxSortie()}}</td>
+                        <td>{{archive.getDateDebutSortie()|date('d/m/Y H:i')}}</td>
+                        <td>{{archive.getDureeSortie()}}</td>
+                        <td>{{archive.getDescriptionSortie()}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+	</div>
+{% endblock %}

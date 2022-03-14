@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="h" id="gestion-sites">
+		<h1 class="title-page">Lieu "{{lieu.getNomLieu()}}"</h1>
+		<table>
+			<tbody>
+                <tr>
+					<td>Ville</td>
+					<td>-> {{lieu.getVilles().getNomVille()}}</td>
+				</tr>
+				<tr>
+					<td>Rue</td>
+					<td>-> {{lieu.getRue()}}</td>
+				</tr>
+                {% if lieu.getLatitude() is not null %}
+				<tr>
+					<td>Latitude</td>
+					<td>-> {{lieu.getLatitude()}}</td>
+				</tr>
+                {% endif %}
+                {% if lieu.getLongitude() is not null %}
+				<tr>
+					<td>Longitude</td>
+					<td>-> {{lieu.getLongitude()}}</td>
+				</tr>
+                {% endif %}
+				{% if lieu.getLatitude() is not null and lieu.getLongitude() is not null %}
+					<tr>
+						<iframe width="400" height="300" style="border:0;margin-left:3%;border-radius:20px" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=fr&amp;q={{lieu.getLatitude()}},{{lieu.getLongitude()}}&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+					</tr>
+				{% endif %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}

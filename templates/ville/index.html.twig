@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestionnaire de villes!
+{% endblock %}
+
+{% block body %}
+
+
+	<div>
+		<h1 class="mt-5 mb-3 text-uppercase">Gestion des villes</h1>
+
+		<div>
+			{%  for type , messages  in app.flashes(['success','error','info']) %}
+				{% for message in messages %}
+					<div class="alert alert-{{ (type =='error') ? 'danger' : type }} text-center" role="alert">
+						{{ message }}
+					</div>
+				{% endfor %}
+			{% endfor %}
+		</div>
+
+		<div>
+			<div class="col-12">
+				<p class="fw-bolder">
+					Filter les villes</p>
+			</div>
+			<form action="{{ path('app_ville_find') }}" class="my-4 row" method="POST">
+				<div class="col-12 col-lg-2">
+					Le nom contient :</div>
+				<div class="col-6 col-lg-4">
+					<input class="form-control rounded-pill" type="text" name="myWord"></div>
+				<div class="col-6 col-lg-2">
+					<button class="btn btn-success" type="submit">
+						Rechercher</button>
+				</div>
+			</form>
+
+		</div>
+
+		<div class="row">
+			<div class="col-lg-8">
+				<div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar ">
+					<table class="table">
+						<thead class="table-dark sticky-top">
+							<tr>
+								<th scope="col">Nom de la ville
+								</th>
+								<th scope="col">Code postal</th>
+
+								{% if is_granted("ROLE_ADMIN") %}
+									<th scope="col">Actions</th>
+								{% endif %}
+							</tr>
+						</thead>
+						<tbody>
+							{% for ville in villes %}
+								<tr>
+									<th>{{ville.nomVille}}</th>
+									<td>{{ville.codePostal}}</td>
+
+									{% if is_granted("ROLE_ADMIN") %}
+										<td>
+											<a class="btn btn-warning text-white btn-border-radius" href="{{ path('app_ville_eddit', {id:ville.id}) }}">
+												<i class="fas fa-edit"></i>
+											</a>
+
+											<button class="my-2 m-lg-0 btn btn-danger btn-border-radius" type="button" data-elementid="{{ville.id}}" data-elementnom="{{ville.nomVille}}" onclick="deleteElement(this)" data-bs-toggle="modal" data-bs-target="#exampleModal">
+												<i class="fas fa-trash"></i>
+											</button>
+
+										</td>
+									{% endif %}
+								</tr>
+							{% endfor %}
+							<tr>
+								{% if is_granted("ROLE_ADMIN")  and (formVille is defined) %}
+
+									{{ form_start(formVille) }}
+									<th>{{ form_row(formVille.nom_ville,{'attr': {'class': 'mt-4 mt-sm-0'}}) }}</th>
+									<th>{{ form_row(formVille.code_postal,{'attr': {'class': 'task_field'}}) }}</th>
+									<td>
+										<div class="mt-4 mt-lg-0">
+											<button class="my-4 btn btn-success text-white" type="submit">Ajouter</button>
+										</div>
+									</td>
+									{{ form_end(formVille) }}
+
+								{% endif %}
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+	{% endblock %}

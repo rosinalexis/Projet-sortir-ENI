@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier une Villle
+{% endblock %}
+
+{% block body %}
+
+
+	<h2 class="my-5 text-uppercase text-center">Modification de la ville
+		{{ville.nomVille}}</h2>
+	<div class="row container ">
+		<div class="col-lg-6 mx-auto">
+
+			{{ form_start(formVille) }}
+			{{ form_widget(formVille) }}
+
+			<div class="my-5 d-grid gap-2 col-6 mx-auto">
+				<button class="py-3 btn btn-primary fw-bolder" type="submit">Modifier</button>
+				<a class="py-3 btn btn-danger fw-bolder" href="{{ path('app_ville') }}">Retour</a>
+			</div>
+			{{ form_end(formVille) }}
+		</div>
+	</div>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="h1">
+		Sorties du site {{site}}
+	</div>
+    <table class="table">
+        <thead>
+            <tr>
+                <td scope="col">Organisateur</td>
+                <td scope="col">Nom sortie</td>
+                <td scope="col">Nombre inscriptions max</td>
+                <td scope="col">Lieu</td>
+                <td scope="col">État</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sortie in sorties %}
+                <tr>
+                    <td scope="row">{{sortie.organisateur.nom}} {{sortie.organisateur.prenom}}</td>
+                    <td scope="row">{{sortie.nom}}</td>
+                    <td scope="row">{{sortie.nbInscriptionsMax}}</td>
+                    <td scope="row">{{sortie.lieux.getNomLieu()}} ({{sortie.lieux.getRue()}})</td>
+                    <td scope="row">{{sortie.etats.getLibelle()}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

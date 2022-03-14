@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<div class="h" id="gestion-sites">
+
+		{{ form_start(forms) }}
+		{{ form_widget(forms) }}
+		<div class="my-5 d-grid gap-2 col-6 mx-auto">
+			<button class="py-3 btn btn-primary fw-bolder" type="submit">Modifier</button>
+			<a class="py-3 btn btn-danger fw-bolder" href="{{ path('sites') }}">Retour</a>
+		</div>
+		{{ form_end(forms) }}
+	</div>
+
+
+{% endblock %}

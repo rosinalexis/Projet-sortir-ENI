@@ -1,0 +1,174 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div id="home">
+
+		{% if app.user %}
+
+			<div class="home-info m-3 desktop">
+				<h4 class="sub-title">Date du jour:
+					{{'now'|date('d/m/Y')}}</h4>
+				<h4 class="sub-title">
+					{% if is_granted('ROLE_ADMIN')%}Administrateur{% else %}Participant:
+						{{app.user.nom}}
+					{% endif %}
+				</h4>
+			</div>
+
+			<div class="desktop">
+				<form id="home-form" action="{{path('home')}}" method="post">
+					<div class="filter-p1">
+						<div class="mb-3 row">
+							<label for="inputPassword" class="col-sm-2 col-form-label">Site</label>
+							<div class="col-sm-10">
+								<select class="form-select mb-3" aria-label=".form-select example" name="filter_site">
+									<option selected value="default">Choix du site</option>
+									{% for site in lstSites %}
+										<option {% if memory['site'] == site.id %} selected {% endif %} value="{{site.Id}}">{{ site.getNomSite() }}</option>
+									{% endfor %}
+								</select>
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="lblN" class="col-sm-2 col-form-label">Le nom de la sortie contient</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="lblN" name="sortie_contains">
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="lbld1" class="col-auto col-form-label">Entre</label>
+							<div class="col-auto">
+								<input type="date" class="form-control" id="lbld1" name="filter_d1" {% if memory['d1'] is defined %} value="{{memory['d1']}}" {% endif %}>
+							</div>
+							<label for="lbld2" class="col-auto col-form-label ms-3">Et</label>
+							<div class="col-auto">
+								<input type="date" class="form-control" id="lbld2" name="filter_d2" {% if memory['d2'] is defined %} value="{{memory['d2']}}" {% endif %}>
+							</div>
+						</div>
+					</div>
+					<div class="filter-p2 ms-3 me-3">
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" id="ch_1" name="ch_s_1" {% if memory['ch_1'] is defined %} checked {% endif %}>
+							<label class="form-check-label" for="ch_1">
+								Sorties dont je suis l'organisateur/trice
+							</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" id="ch_2" name="ch_s_2" {% if memory['ch_2'] is defined %} checked {% endif %}>
+							<label class="form-check-label" for="ch_2">
+								Sorties auxquelles je suis inscrit/e
+							</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" id="ch_3" name="ch_s_3" {% if memory['ch_3'] is defined %} checked {% endif %}>
+							<label class="form-check-label" for="ch_3">
+								Sorties auxquelles je ne suis pas inscrit/e
+							</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" id="ch_4" name="ch_s_4" {% if memory['ch_4'] is defined %} checked {% endif %}>
+							<label class="form-check-label" for="ch_4">
+								Sorties passées
+							</label>
+						</div>
+					</div>
+
+					<button id="a" class="btn btn-primary btn-lg">Rechercher</button>
+
+				</form>
+			</div>
+
+			<div id="table-home" class="table-responsive my-custom-scrollbar table-wrapper-scroll-y">
+				<table class="table">
+					<thead class="sticky-top table-dark">
+						<th>Nom de la sortie</th>
+						<th>Date de la sortie</th>
+						<th class="table-mobile">Lieu</th>
+						<th class="desktop">Date de clôture</th>
+						<th class="desktop">Inscrits/places</th>
+						<th class="desktop">Etat</th>
+						<th class="desktop">Inscrit</th>
+						<th class="desktop">Organisateur</th>
+						<th class="desktop">Actions</th>
+					</thead>
+					<tbody>
+						{% for sortie in lstSortie %}
+							<tr>
+								<td>
+									<a href="{{path('showSortie',{id:sortie.id})}}">{{sortie.nom}}</a>
+								</td>
+								<td>{{sortie.getDateDebut() | date('d/m/Y H:i')}}</td>
+								<td class="table-mobile">
+									{% if sortie.lieux!= null %}
+										{{sortie.lieux.getNomLieu()}}
+									{% else %}
+										N/A
+									{% endif %}
+								</td>
+								<td class="desktop">{{sortie.getDateCloture() | date('d/m/Y H:i')}}</td>
+								<td class="desktop">
+									{{sortie.getInscriptions().count}}/{{sortie.nbInscriptionsMax}}
+								</td>
+								<td class="desktop">{{sortie.etats.libelle}}</td>
+								<td class="desktop">
+									{% for ins in sortie.getInscriptions() %}
+										{% if app.user.Id == ins.getParticipants().Id  %}
+											X
+										{% endif %}
+									{% endfor %}
+								</td>
+								<td class="desktop">
+									<a href="{{path('app_profile_show',{id:sortie.organisateur.id})}}">{{sortie.organisateur.nom|upper}}
+										{{sortie.organisateur.prenom}}</a>
+								</td>
+								<td class="desktop">
+									{% if is_granted("ROLE_ADMIN") or sortie.organisateur.id == app.user.id %}
+										<div>
+											<a style="border-radius:50%" href="{{path('editSortie',{'id':sortie.id})}}" class="btn btn-warning">
+												<i class="fas fa-edit"></i>
+											</a>
+
+											<button class="my-2 m-lg-0 btn btn-danger btn-border-radius" type="button" data-elementid="{{sortie.id}}" data-elementnom="{{sortie.nom}}" onclick="deleteElement(this)" data-bs-toggle="modal" data-bs-target="#exampleModal">
+												<i class="fas fa-trash"></i>
+											</button>
+											{% if sortie.etats.libelle != "Annulé" and sortie.etats.libelle != "Passée" and sortie.etats.libelle != "Clôturée" and sortie.etats.libelle != "Activité en cours" %}
+												<a style="border-radius:50%" href="{{path('annuleSortie',{'id':sortie.id})}}" class="btn btn-info">
+													<i class="fas fa-times"></i>
+												</a>
+											{% endif %}
+										</div>
+									{% endif %}
+									<div style="margin-top:1%" class="desktop">
+										{% set inscrit = false %}
+										{% for ins in sortie.getInscriptions() %}
+											{% if app.user.Id == ins.getParticipants().Id  %}
+												{% set inscrit = true %}
+											{% endif %}
+										{% endfor %}
+										{% if inscrit == true  %}
+											<a href="{{path('desistSortie',{'sortie':sortie.id,'user':app.user.getId()})}}" class="btn btn-outline-warning">Se désister</a>
+										{% else %}
+											{% if sortie.etats.getLibelle() == "Ouverte" and sortie.organisateur.id != app.user.id and sortie.getInscriptions().count < sortie.nbInscriptionsMax %}
+												<a href="{{path('inscriptionSortie',{'sortie':sortie.id,'user':app.user.getId()})}}" class="btn btn-outline-success">S'inscrire</a>
+											{% endif %}
+										{% endif %}
+									</div>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+
+			<a href="{{path('addSortie')}}" class="btn btn-success">Créer une sortie</a>
+			{% if is_granted('ROLE_ADMIN')%}
+				<a href="{{path('showArchives')}}" class="btn btn-outline-primary desktop">Sorties archivées</a>
+			{% endif %}
+		{% else %}
+			<div class="h" id="gestion-sites">
+				<div class="container">Veuillez vous connecter</div>
+			</div>
+		{% endif %}
+
+	</div>
+{% endblock %}

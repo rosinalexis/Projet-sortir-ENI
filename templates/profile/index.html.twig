@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestionnaire de participants!
+{% endblock %}
+
+{% block body %}
+
+	<div class="example-wrapper">
+		<h1 class="mt-5 mb-3 text-uppercase">Gestion des participants</h1>
+		{% if app.user %}
+			<div class="row">
+				<div class="col-auto">
+					<a class="btn btn-primary" href="{{ path('app_profile_show', {id:app.user.id}) }}">
+						Afficher mon profil</a>
+				</div>
+				<div class="col-auto">
+					<a class="mt-2 mt-lg-0 mt-sm-2 btn btn-warning text-white" href="{{ path('app_register') }}">Ajouter un participant</a>
+				</div>
+				<div class="col-auto">
+					<a class="mt-2 mt-lg-0 mt-sm-2 btn btn-danger text-white" href="{{ path('app_profile_eddit', {id:app.user.id}) }}">modifier mon profil</a>
+				</div>
+				<div class="col-auto">
+					<a class="mt-2 mt-lg-0 mt-sm-2 btn btn-success text-white" href="{{ path('app_profile_add_json') }}">Ajouter des utilisateurs via un fichier</a>
+				</div>
+			</div>
+
+
+		{% endif %}
+
+		<h2 class="mt-5 mb-3 text-uppercase">
+			Gestionnaire admin des utilisateurs
+		</h2>
+		<div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar">
+			<table class="table ">
+				<thead>
+					<tr>
+						<th scope="col">Nom</th>
+						<th scope="col">Prénom</th>
+						<th scope="col">Email</th>
+						<th scope="col">Téléphone</th>
+						<th scope="col">Etat du compte</th>
+						<th scope="col">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					{% for participant in participants %}
+
+						{% if not (participant.id == app.user.id)  %}
+							<tr>
+								<th>{{participant.nom}}</th>
+								<td>{{participant.prenom}}</td>
+								<td>{{participant.email}}</td>
+								<td>{{participant.telephone}}</td>
+
+								{% if participant.actif %}
+									<td>
+										<a href="{{ path('app_profile_status',{id:participant.id}) }}">
+											<span class="badge bg-success">ok</span>
+										</a>
+									</td>
+
+								{% else %}
+									<td>
+										<a href="{{ path('app_profile_status',{id:participant.id}) }}">
+											<span class="badge bg-dark">na</span>
+										</a>
+									</td>
+								{% endif %}
+								<td>
+									<a class="mt-2 mt-lg-0 btn btn-primary" href="{{ path('app_profile_show', {id:participant.id}) }}">
+										<i class="fas fa-eye"></i>
+									</a>
+
+									<a class="mt-2 mt-lg-0 btn btn-warning text-white" href="{{ path('app_profile_eddit', {id:participant.id}) }}">
+										<i class="fas fa-edit"></i>
+									</a>
+									<button type="button" class="mt-2 mt-lg-0 btn btn-danger" data-elementid="{{participant.id}}" data-elementnom="{{participant.nom}}" onclick="deleteElement(this)" data-bs-toggle="modal" data-bs-target="#exampleModal">
+										<i class="fas fa-trash"></i>
+									</button>
+								</td>
+							</tr>
+
+						{% endif %}
+
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+
+{% endblock %}

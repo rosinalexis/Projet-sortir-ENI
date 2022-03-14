@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="h" id="gestion-sites">
+		<h1 class="title-page">Créer un lieu</h1>
+        {{form_start(form)}}
+            <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Ville*</span>
+                <select class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="ville" id="ville" required>
+					<option selected></option>
+					{% for ville in villes %}
+							<option value="{{ville.getId()}}" name="{{ville.getId()}}">{{ville.getNomVille()}}</option>
+					{% endfor %}
+				</select>
+            </div>
+
+            <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Nom*</span>
+                <input type="text" name="nom_lieu" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+            </div>
+
+            <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Rue*</span>
+                <input type="text" name="rue" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+            </div>
+
+            <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text">Latitude/longitude</span>
+                <input type="number" step=".00001" name="latitude" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                <input type="number" step=".00001" name="longitude" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+            </div>
+
+            <div class="input-group input-group-sm mb-3">
+                <input type="submit" value="Ajouter" class="btn btn-success">
+            </div>
+        {{form_end(form)}}
+    </div>
+{% endblock %}
